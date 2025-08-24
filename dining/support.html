@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TummyTrek | Support & Communication</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Vibrant Food-Themed Color Palette */
+            --primary: #FF6B35;  /* Vibrant Orange */
+            --primary-light: #FF9E56;  
+            --primary-dark: #E04E10;
+            --secondary: #4ECDC4;  /* Fresh Teal */
+            --accent: #FFD166;  /* Golden Yellow */
+            --danger: #EF476F;  /* Vibrant Pink */
+            --success: #06D6A0;  /* Mint Green */
+            
+            /* Neutrals */
+            --dark: #2E2E2E;
+            --gray-dark: #5E5E5E;
+            --gray: #9E9E9E;
+            --gray-light: #E0E0E0;
+            --light: #F8F9FA;
+            --white: #FFFFFF;
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.15);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.2);
+            
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            
+            /* Transitions */
+            --transition-fast: 0.2s ease;
+            --transition-med: 0.3s ease;
+            --transition-slow: 0.4s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .brand {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+        
+        .brand-text {
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        
+        .nav-menu {
+            padding: 1.5rem 0;
+        }
+        
+        .nav-item {
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            font-weight: 500;
+            margin: 0.25rem 0;
+        }
+        
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .nav-item.active {
+            background: rgba(255,255,255,0.15);
+            border-left: 4px solid var(--accent);
+        }
+        
+        .nav-item i {
+            width: 24px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            padding: 2rem;
+            background-color: var(--light);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-med);
+            border-top: 4px solid var(--primary);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .stat-card .title {
+            font-size: 0.95rem;
+            color: var(--gray-dark);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .stat-card .change {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .change.positive {
+            color: var(--success);
+        }
+        
+        .change.negative {
+            color: var(--danger);
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+        
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--gray-dark);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        tr:hover {
+            background: rgba(70, 107, 238, 0.03);
+        }
+        
+        /* Status Badges */
+        .status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .status i {
+            font-size: 0.7rem;
+        }
+        
+        .status.active {
+            background: rgba(6, 214, 160, 0.1);
+            color: var(--success);
+        }
+        
+        .status.scheduled {
+            background: rgba(255, 209, 102, 0.15);
+            color: #D4A017;
+        }
+        
+        .status.expired {
+            background: rgba(158, 158, 158, 0.1);
+            color: var(--gray);
+        }
+        
+        .status.paused {
+            background: rgba(239, 71, 111, 0.1);
+            color: var(--danger);
+        }
+        
+        .status.pending {
+            background: rgba(255, 209, 102, 0.15);
+            color: #D4A017;
+        }
+        
+        .status.completed {
+            background: rgba(6, 214, 160, 0.1);
+            color: var(--success);
+        }
+        
+        /* Badges */
+        .badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background: var(--light);
+            color: var(--gray-dark);
+        }
+        
+        .badge-primary {
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--primary);
+        }
+        
+        /* Buttons */
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: var(--white);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gray-light);
+            color: var(--gray-dark);
+        }
+        
+        .btn-outline:hover {
+            background: var(--light);
+        }
+        
+        /* Tabs */
+        .section-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--gray-light);
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--gray-dark);
+            position: relative;
+            transition: var(--transition-fast);
+        }
+        
+        .section-tab:hover {
+            color: var(--primary);
+        }
+        
+        .section-tab.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .section-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        /* Section Pages */
+        .section-page {
+            display: none;
+        }
+        
+        .section-page.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        .sub-section {
+            display: none;
+        }
+        
+        .sub-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--gray-dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            transition: var(--transition-fast);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            background-color: var(--white);
+            cursor: pointer;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        /* Chat Styles */
+        .chat-container {
+            display: flex;
+            height: 500px;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        
+        .chat-sidebar {
+            width: 300px;
+            background: var(--light);
+            border-right: 1px solid var(--gray-light);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-search {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .chat-search input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+        }
+        
+        .chat-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .chat-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-light);
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        
+        .chat-item:hover {
+            background: rgba(255, 107, 53, 0.05);
+        }
+        
+        .chat-item.active {
+            background: rgba(255, 107, 53, 0.1);
+            border-left: 3px solid var(--primary);
+        }
+        
+        .chat-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .chat-item-name {
+            font-weight: 600;
+        }
+        
+        .chat-item-time {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .chat-item-message {
+            font-size: 0.9rem;
+            color: var(--gray-dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .chat-info h3 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .chat-info p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .message {
+            max-width: 70%;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            position: relative;
+        }
+        
+        .message.received {
+            background: var(--light);
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+        
+        .message.sent {
+            background: rgba(255, 107, 53, 0.1);
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+        
+        .message-time {
+            font-size: 0.7rem;
+            color: var(--gray);
+            margin-top: 0.5rem;
+            text-align: right;
+        }
+        
+        .chat-input {
+            padding: 1rem;
+            border-top: 1px solid var(--gray-light);
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+        }
+        
+        .chat-input button {
+            padding: 0.75rem 1.25rem;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+        }
+        
+        /* File Upload */
+        .file-upload {
+            border: 2px dashed var(--gray-light);
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        
+        .file-upload:hover {
+            border-color: var(--primary);
+        }
+        
+        .file-upload i {
+            font-size: 2rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+        
+        .file-upload p {
+            color: var(--gray-dark);
+            margin-bottom: 1rem;
+        }
+        
+        .file-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .file-preview-item {
+            width: 100px;
+            height: 100px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .file-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .file-preview-item button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--danger);
+            color: var(--white);
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .dashboard-container {
+                grid-template-columns: 240px 1fr;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .chat-container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .chat-sidebar {
+                width: 100%;
+                height: 200px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .section-tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .message {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <div class="brand-text">TummyTrek</div>
+            </div>
+            
+            <div class="nav-menu">
+                <div class="nav-item" onclick="showSection('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" onclick="showSection('orders')">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Order Management</span>
+                </div>
+                <div class="nav-item" onclick="showSection('menu')">
+                    <i class="fas fa-utensils"></i>
+                    <span>Menu Management</span>
+                </div>
+                <div class="nav-item" onclick="showSection('preparation')">
+                    <i class="fas fa-clock"></i>
+                    <span>Order Preparation</span>
+                </div>
+                <div class="nav-item" onclick="showSection('promotions')">
+                    <i class="fas fa-percentage"></i>
+                    <span>Promotions & Offers</span>
+                </div>
+                <div class="nav-item" onclick="showSection('earnings')">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Earnings & Reports</span>
+                </div>
+                <div class="nav-item active" onclick="showSection('support')">
+                    <i class="fas fa-headset"></i>
+                    <span>Support & Communication</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="header">
+                <h1 class="page-title">Support & Communication</h1>
+                <div class="user-profile">
+                    <div class="user-avatar">RK</div>
+                    <div>
+                        <div style="font-weight: 600;">Royal Kitchen</div>
+                        <div style="font-size: 0.85rem; color: var(--gray);">Premium Partner</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Support Section -->
+            <div id="support-section" class="section-page active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="title"><i class="fas fa-question-circle"></i> Open Tickets</div>
+                        <div class="value">4</div>
+                        <div class="change negative">
+                            <i class="fas fa-arrow-up"></i> 1 new today
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="title"><i class="fas fa-clock"></i> Avg. Response Time</div>
+                        <div class="value">2.4 hours</div>
+                        <div class="change positive">
+                            <i class="fas fa-arrow-down"></i> Improved from 3.2 hours
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="title"><i class="fas fa-check-circle"></i> Resolved Issues</div>
+                        <div class="value">98%</div>
+                        <div class="change positive">
+                            <i class="fas fa-arrow-up"></i> 2% improvement
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="title"><i class="fas fa-star"></i> Satisfaction Rate</div>
+                        <div class="value">4.8/5</div>
+                        <div class="change positive">
+                            <i class="fas fa-arrow-up"></i> Consistent
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-tabs">
+                    <div class="section-tab active" data-target="support-chat">Chat with Support</div>
+                    <div class="section-tab" data-target="order-disputes">Order Disputes</div>
+                    <div class="section-tab" data-target="knowledge-base">Knowledge Base</div>
+                </div>
+                
+                <!-- Support Chat Subsection -->
+                <div id="support-chat" class="sub-section active">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Chat with Customer Support</h2>
+                            <div class="chart-actions">
+                                <select class="form-select" style="width: auto;">
+                                    <option>All Chats</option>
+                                    <option>Active</option>
+                                    <option>Resolved</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <div class="chat-container">
+                                <div class="chat-sidebar">
+                                    <div class="chat-search">
+                                        <input type="text" placeholder="Search conversations...">
+                                    </div>
+                                    <div class="chat-list">
+                                        <div class="chat-item active">
+                                            <div class="chat-item-header">
+                                                <div class="chat-item-name">TummyTrek Support</div>
+                                                <div class="chat-item-time">10:30 AM</div>
+                                            </div>
+                                            <div class="chat-item-message">Hi there! How can we help you today?</div>
+                                        </div>
+                                        <div class="chat-item">
+                                            <div class="chat-item-header">
+                                                <div class="chat-item-name">Delivery Issues Team</div>
+                                                <div class="chat-item-time">Yesterday</div>
+                                            </div>
+                                            <div class="chat-item-message">We're following up on your delivery complaint</div>
+                                        </div>
+                                        <div class="chat-item">
+                                            <div class="chat-item-header">
+                                                <div class="chat-item-name">Billing Department</div>
+                                                <div class="chat-item-time">Jun 28</div>
+                                            </div>
+                                            <div class="chat-item-message">Your payment issue has been resolved</div>
+                                        </div>
+                                        <div class="chat-item">
+                                            <div class="chat-item-header">
+                                                <div class="chat-item-name">Technical Support</div>
+                                                <div class="chat-item-time">Jun 25</div>
+                                            </div>
+                                            <div class="chat-item-message">Need help with the app?</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="chat-main">
+                                    <div class="chat-header">
+                                        <div class="chat-avatar">TS</div>
+                                        <div class="chat-info">
+                                            <h3>TummyTrek Support</h3>
+                                            <p>Typically replies within minutes</p>
+                                        </div>
+                                    </div>
+                                    <div class="chat-messages">
+                                        <div class="message received">
+                                            <div class="message-text">Hi there! Welcome to TummyTrek Support. How can we help you today?</div>
+                                            <div class="message-time">10:30 AM</div>
+                                        </div>
+                                        <div class="message sent">
+                                            <div class="message-text">Hi, I'm having an issue with a recent order #ORD-2876. The customer says they didn't receive their full order.</div>
+                                            <div class="message-time">10:32 AM</div>
+                                        </div>
+                                        <div class="message received">
+                                            <div class="message-text">I'm sorry to hear that. Let me check the order details for you.</div>
+                                            <div class="message-time">10:33 AM</div>
+                                        </div>
+                                        <div class="message received">
+                                            <div class="message-text">I can see that order #ORD-2876 was delivered yesterday at 7:42 PM. What items are missing according to the customer?</div>
+                                            <div class="message-time">10:35 AM</div>
+                                        </div>
+                                        <div class="message sent">
+                                            <div class="message-text">They said the garlic naan and mint chutney were missing from the order.</div>
+                                            <div class="message-time">10:36 AM</div>
+                                        </div>
+                                    </div>
+                                    <div class="chat-input">
+                                        <input type="text" placeholder="Type your message...">
+                                        <button>Send</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Recent Support Tickets</h2>
+                            <button class="btn-primary" onclick="showSubSection('order-disputes')">
+                                <i class="fas fa-plus"></i> New Ticket
+                            </button>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <div class="offers-grid">
+                                <div class="offer-card">
+                                    <div class="offer-header">
+                                        <h3 class="offer-title">Delivery Delay</h3>
+                                        <div class="offer-dates">Ticket #7892</div>
+                                    </div>
+                                    <div class="offer-body">
+                                        <div class="offer-details">
+                                            <div class="offer-detail">
+                                                <span>Customer</span>
+                                                <span>Rahul Sharma</span>
+                                            </div>
+                                            <div class="offer-detail">
+                                                <span>Order</span>
+                                                <span>#ORD-2876</span>
+                                            </div>
+                                            <div class="offer-detail">
+                                                <span>Priority</span>
+                                                <span class="badge badge-primary">High</span>
+                                            </div>
+                                            <div class="offer-detail">
+                                                <span>Status</span>
+                                                <span class="status active">In Progress</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="offer-footer">
+                                        <div>Last updated: 2 hours ago</div>
+                                        <button class="action-btn btn-outline">
+                                            <i class="fas fa-eye"></i> View
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="offer-card">
+                                    <div class="offer-header">
+                                        <h3 class="offer-title">Wrong Item Received</h3>
+                                        <div class="offer-dates">Ticket #7891</div>
+                                    </div>
+                                    <div class="offer-body">
+                                        <div class="offer-details">
+                                            <div class="offer-detail">
+                                                <span>Customer</span>
+                                                <span>Priya Patel</span>
+                                            </div>
+                                            <div class="offer-detail">
+                                                <span>Order</span>
+                                                <span>#ORD-2875</span>
+                                            </div>
+                                            <div class="offer-detail">
+                                                <span>Priority</span>
+                                                <span class="badge badge-primary">Medium</span>
+                                            </div>
+                                            <div class="offer-detail">
+                                                <span>Status</span>
+                                                <span class="status active">In Progress</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="offer-footer">
+                                        <div>Last updated: 5 hours ago</div>
+                                        <button class="action-btn btn-outline">
+                                            <i class="fas fa-eye"></i> View
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="offer-card">
+                                    <div class="offer-header">
+                                        <h3 class="offer-title">Payment Issue</h3>
+                                        <div class="offer-dates">Ticket #7890</div>
+                                    </div>
+                                    <div class="offer-body">
+                                        <div class="offer-details">
+                                            <div class="offer-detail">
+                                                <span>Customer</span>
+                                                <span>Vikram Singh</span>
+                                            </div>
+                                            <div class="offer-detail">
+                                                <span>Order</span>
+                                                <span>#ORD-2874</span>
+                                            </div>
+                                            <div class="offer-detail">
+                                                <span>Priority</span>
+                                                <span class="badge badge-primary">Low</span>
+                                            </div>
+                                            <div class="offer-detail">
+                                                <span>Status</span>
+                                                <span class="status scheduled">Pending</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="offer-footer">
+                                        <div>Last updated: 1 day ago</div>
+                                        <button class="action-btn btn-outline">
+                                            <i class="fas fa-eye"></i> View
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Order Disputes Subsection -->
+                <div id="order-disputes" class="sub-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Submit Order Dispute</h2>
+                            <button class="btn-outline">
+                                <i class="fas fa-history"></i> Past Disputes
+                            </button>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <form id="dispute-form">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label class="form-label">Order ID</label>
+                                        <select class="form-select">
+                                            <option>Select an order</option>
+                                            <option>#ORD-2876 - Rahul Sharma - ₹845</option>
+                                            <option>#ORD-2875 - Priya Patel - ₹1,245</option>
+                                            <option>#ORD-2874 - Vikram Singh - ₹525</option>
+                                            <option>#ORD-2873 - Anjali Mehta - ₹1,085</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Dispute Type</label>
+                                        <select class="form-select">
+                                            <option>Select dispute type</option>
+                                            <option>Missing items</option>
+                                            <option>Wrong items delivered</option>
+                                            <option>Quality issues</option>
+                                            <option>Delivery delay</option>
+                                            <option>Payment issue</option>
+                                            <option>Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Dispute Details</label>
+                                    <textarea class="form-control" rows="4" placeholder="Please describe the issue in detail..."></textarea>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Upload Evidence (Photos)</label>
+                                    <div class="file-upload" id="file-upload-area">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Drag & drop images here or click to browse</p>
+                                        <button type="button" class="action-btn btn-outline">
+                                            <i class="fas fa-plus"></i> Select Files
+                                        </button>
+                                    </div>
+                                    <div class="file-preview">
+                                        <!-- File previews will appear here -->
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Desired Resolution</label>
+                                    <select class="form-select">
+                                        <option>Select desired resolution</option>
+                                        <option>Refund for missing/wrong items</option>
+                                        <option>Partial refund</option>
+                                        <option>Full refund</option>
+                                        <option>Re-delivery of correct order</option>
+                                        <option>Credit for future order</option>
+                                    </select>
+                                </div>
+                                
+                                <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+                                    <button type="reset" class="action-btn btn-outline">Clear Form</button>
+                                    <button type="button" class="action-btn btn-primary" onclick="submitDispute()">Submit Dispute</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Recent Order Disputes</h2>
+                            <button class="btn-outline">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Dispute ID</th>
+                                        <th>Order ID</th>
+                                        <th>Type</th>
+                                        <th>Submitted</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#D-1245</td>
+                                        <td>#ORD-2871</td>
+                                        <td>Missing items</td>
+                                        <td>2 days ago</td>
+                                        <td><span class="status active">Under Review</span></td>
+                                        <td>
+                                            <button class="action-btn btn-outline">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#D-1244</td>
+                                        <td>#ORD-2868</td>
+                                        <td>Quality issues</td>
+                                        <td>5 days ago</td>
+                                        <td><span class="status completed">Resolved</span></td>
+                                        <td>
+                                            <button class="action-btn btn-outline">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#D-1243</td>
+                                        <td>#ORD-2865</td>
+                                        <td>Wrong items</td>
+                                        <td>1 week ago</td>
+                                        <td><span class="status completed">Resolved</span></td>
+                                        <td>
+                                            <button class="action-btn btn-outline">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Knowledge Base Subsection -->
+                <div id="knowledge-base" class="sub-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Knowledge Base</h2>
+                            <div class="chart-actions">
+                                <input type="text" class="form-control" placeholder="Search articles..." style="width: 250px;">
+                            </div>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <div class="offers-grid">
+                                <div class="offer-card">
+                                    <div class="offer-header">
+                                        <h3 class="offer-title">How to Update Menu Items</h3>
+                                    </div>
+                                    <div class="offer-body">
+                                        <p>Step-by-step guide to adding, editing, or removing items from your menu.</p>
+                                    </div>
+                                    <div class="offer-footer">
+                                        <button class="action-btn btn-outline">
+                                            <i class="fas fa-eye"></i> Read Article
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="offer-card">
+                                    <div class="offer-header">
+                                        <h3 class="offer-title">Managing Orders Efficiently</h3>
+                                    </div>
+                                    <div class="offer-body">
+                                        <p>Best practices for handling high volume orders during peak hours.</p>
+                                    </div>
+                                    <div class="offer-footer">
+                                        <button class="action-btn btn-outline">
+                                            <i class="fas fa-eye"></i> Read Article
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="offer-card">
+                                    <div class="offer-header">
+                                        <h3 class="offer-title">Promotion Strategies</h3>
+                                    </div>
+                                    <div class="offer-body">
+                                        <p>Effective ways to create promotions that attract more customers.</p>
+                                    </div>
+                                    <div class="offer-footer">
+                                        <button class="action-btn btn-outline">
+                                            <i class="fas fa-eye"></i> Read Article
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="offer-card">
+                                    <div class="offer-header">
+                                        <h3 class="offer-title">Handling Order Disputes</h3>
+                                    </div>
+                                    <div class="offer-body">
+                                        <p>How to effectively resolve customer complaints and order issues.</p>
+                                    </div>
+                                    <div class="offer-footer">
+                                        <button class="action-btn btn-outline">
+                                            <i class="fas fa-eye"></i> Read Article
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="offer-card">
+                                    <div class="offer-header">
+                                        <h3 class="offer-title">Delivery Partner Coordination</h3>
+                                    </div>
+                                    <div class="offer-body">
+                                        <p>Tips for working effectively with delivery partners to ensure timely orders.</p>
+                                    </div>
+                                    <div class="offer-footer">
+                                        <button class="action-btn btn-outline">
+                                            <i class="fas fa-eye"></i> Read Article
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="offer-card">
+                                    <div class="offer-header">
+                                        <h3 class="offer-title">Payment Issue Resolution</h3>
+                                    </div>
+                                    <div class="offer-body">
+                                        <p>How to troubleshoot and resolve common payment-related problems.</p>
+                                    </div>
+                                    <div class="offer-footer">
+                                        <button class="action-btn btn-outline">
+                                            <i class="fas fa-eye"></i> Read Article
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">FAQ</h2>
+                            <button class="btn-outline">
+                                <i class="fas fa-question-circle"></i> Ask a Question
+                            </button>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <div class="form-group">
+                                <div class="faq-item">
+                                    <h3>How long does it take to resolve a delivery issue?</h3>
+                                    <p>Most delivery issues are resolved within 24-48 hours. Complex cases may take up to 5 business days.</p>
+                                </div>
+                                <div class="faq-item">
+                                    <h3>What evidence should I provide for order disputes?</h3>
+                                    <p>Please provide clear photos of the issue, packaging if relevant, and any other documentation that supports your claim.</p>
+                                </div>
+                                <div class="faq-item">
+                                    <h3>How are refunds processed?</h3>
+                                    <p>Refunds are typically processed within 3-5 business days and will be credited to the original payment method.</p>
+                                </div>
+                                <div class="faq-item">
+                                    <h3>What's the best way to prevent order issues?</h3>
+                                    <p>Double-check orders before handing them to delivery partners, ensure proper packaging, and maintain clear communication with customers.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to show different sections
+        function showSection(sectionId) {
+            // Hide all section pages
+            document.querySelectorAll('.section-page').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show the selected section
+            document.getElementById(sectionId + '-section').classList.add('active');
+            
+            // Set the selected nav item as active
+            event.currentTarget.classList.add('active');
+            
+            // Update page title
+            const pageTitle = event.currentTarget.querySelector('span').textContent;
+            document.querySelector('.page-title').textContent = pageTitle;
+        }
+        
+        // Tab functionality for support section
+        document.querySelectorAll('.section-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                document.querySelectorAll('.section-tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Hide all sub-sections
+                document.querySelectorAll('.sub-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show the targeted sub-section
+                const targetId = this.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+        
+        // Function to show specific sub-section
+        function showSubSection(subSectionId) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.section-tab').forEach(t => {
+                t.classList.remove('active');
+                if (t.getAttribute('data-target') === subSectionId) {
+                    t.classList.add('active');
+                }
+            });
+            
+            // Hide all sub-sections
+            document.querySelectorAll('.sub-section').forEach(section => {
+                section.classList.remove('active');
+                if (section.id === subSectionId) {
+                    section.classList.add('active');
+                }
+            });
+        }
+        
+        // Function to handle dispute submission
+        function submitDispute() {
+            // In a real application, this would submit the form data to a server
+            // For this demo, we'll just show a confirmation message
+            
+            const orderId = document.querySelector('.form-select').value;
+            const disputeType = document.querySelectorAll('.form-select')[1].value;
+            
+            if (!orderId || orderId === 'Select an order' || !disputeType || disputeType === 'Select dispute type') {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Show success message
+            alert('Your dispute has been submitted successfully! Our support team will review it and get back to you within 24 hours.');
+            
+            // Reset the form
+            document.getElementById('dispute-form').reset();
+            document.querySelector('.file-preview').innerHTML = '';
+        }
+        
+        // Initialize the support section
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listeners to chat items
+            document.querySelectorAll('.chat-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.chat-item').forEach(i => {
+                        i.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+            
+            // Handle file upload area
+            const fileUploadArea = document.getElementById('file-upload-area');
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.multiple = true;
+            fileInput.style.display = 'none';
+            
+            fileUploadArea.appendChild(fileInput);
+            
+            fileUploadArea.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            fileInput.addEventListener('change', function() {
+                const files = fileInput.files;
+                const previewArea = document.querySelector('.file-preview');
+                
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (file.type.match('image.*')) {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            const previewItem = document.createElement('div');
+                            previewItem.className = 'file-preview-item';
+                            
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            
+                            const removeBtn = document.createElement('button');
+                            removeBtn.innerHTML = '&times;';
+                            removeBtn.addEventListener('click', function() {
+                                previewItem.remove();
+                            });
+                            
+                            previewItem.appendChild(img);
+                            previewItem.appendChild(removeBtn);
+                            previewArea.appendChild(previewItem);
+                        }
+                        
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
+            
+            // Handle chat input
+            const chatInput = document.querySelector('.chat-input input');
+            const chatSendBtn = document.querySelector('.chat-input button');
+            const chatMessages = document.querySelector('.chat-messages');
+            
+            function sendMessage() {
+                const messageText = chatInput.value.trim();
+                if (messageText) {
+                    const now = new Date();
+                    const timeString = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+                    
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'message sent';
+                    messageElement.innerHTML = `
+                        <div class="message-text">${messageText}</div>
+                        <div class="message-time">${timeString}</div>
+                    `;
+                    
+                    chatMessages.appendChild(messageElement);
+                    chatInput.value = '';
+                    
+                    // Auto scroll to bottom
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Simulate reply after a short delay
+                    setTimeout(simulateReply, 1000 + Math.random() * 2000);
+                }
+            }
+            
+            function simulateReply() {
+                const replies = [
+                    "Thanks for providing that information. I'm looking into this for you.",
+                    "I understand your concern. Let me check what options we have to resolve this.",
+                    "I can help with that. Please give me a moment to review the order details.",
+                    "I appreciate your patience. I'm checking with our delivery team now.",
+                    "That's definitely not the experience we want you to have. Let me see how we can make this right."
+                ];
+                
+                const randomReply = replies[Math.floor(Math.random() * replies.length)];
+                const now = new Date();
+                const timeString = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+                
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message received';
+                messageElement.innerHTML = `
+                    <div class="message-text">${randomReply}</div>
+                    <div class="message-time">${timeString}</div>
+                `;
+                
+                chatMessages.appendChild(messageElement);
+                
+                // Auto scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            chatSendBtn.addEventListener('click', sendMessage);
+            
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

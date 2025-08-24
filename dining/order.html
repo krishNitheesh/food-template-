@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TummyTrek | Vendor Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Vibrant Food-Themed Color Palette */
+            --primary: #FF6B35;  /* Vibrant Orange */
+            --primary-light: #FF9E56;  
+            --primary-dark: #E04E10;
+            --secondary: #4ECDC4;  /* Fresh Teal */
+            --accent: #FFD166;  /* Golden Yellow */
+            --danger: #EF476F;  /* Vibrant Pink */
+            --success: #06D6A0;  /* Mint Green */
+            
+            /* Neutrals */
+            --dark: #2E2E2E;
+            --gray-dark: #5E5E5E;
+            --gray: #9E9E9E;
+            --gray-light: #E0E0E0;
+            --light: #F8F9FA;
+            --white: #FFFFFF;
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.15);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.2);
+            
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            
+            /* Transitions */
+            --transition-fast: 0.2s ease;
+            --transition-med: 0.3s ease;
+            --transition-slow: 0.4s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .brand {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+        
+        .brand-text {
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        
+        .nav-menu {
+            padding: 1.5rem 0;
+        }
+        
+        .nav-item {
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            font-weight: 500;
+            margin: 0.25rem 0;
+        }
+        
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .nav-item.active {
+            background: rgba(255,255,255,0.15);
+            border-left: 4px solid var(--accent);
+        }
+        
+        .nav-item i {
+            width: 24px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            padding: 2rem;
+            background-color: var(--light);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-med);
+            border-top: 4px solid var(--primary);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .stat-card .title {
+            font-size: 0.95rem;
+            color: var(--gray-dark);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .stat-card .change {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .change.positive {
+            color: var(--success);
+        }
+        
+        .change.negative {
+            color: var(--danger);
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+        
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--gray-dark);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        tr:hover {
+            background: rgba(70, 107, 238, 0.03);
+        }
+        
+        /* Status Badges */
+        .status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .status i {
+            font-size: 0.7rem;
+        }
+        
+        .status.new {
+            background: rgba(239, 71, 111, 0.1);
+            color: var(--danger);
+        }
+        
+        .status.preparing {
+            background: rgba(255, 209, 102, 0.15);
+            color: #D4A017;
+        }
+        
+        .status.ready {
+            background: rgba(6, 214, 160, 0.1);
+            color: var(--success);
+        }
+        
+        .status.completed {
+            background: rgba(78, 205, 196, 0.1);
+            color: var(--secondary);
+        }
+        
+        .status.cancelled {
+            background: rgba(239, 71, 111, 0.1);
+            color: var(--danger);
+        }
+        
+        /* Badges */
+        .badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background: var(--light);
+            color: var(--gray-dark);
+        }
+        
+        .badge-primary {
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--primary);
+        }
+        
+        /* Buttons */
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: var(--white);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gray-light);
+            color: var(--gray-dark);
+        }
+        
+        .btn-outline:hover {
+            background: var(--light);
+        }
+        
+        /* Tabs */
+        .section-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--gray-light);
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--gray-dark);
+            position: relative;
+            transition: var(--transition-fast);
+        }
+        
+        .section-tab:hover {
+            color: var(--primary);
+        }
+        
+        .section-tab.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .section-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        /* Section Pages */
+        .section-page {
+            display: none;
+        }
+        
+        .section-page.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        .sub-section {
+            display: none;
+        }
+        
+        .sub-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .dashboard-container {
+                grid-template-columns: 240px 1fr;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .section-tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <div class="brand-text">TummyTrek</div>
+            </div>
+            
+            <div class="nav-menu">
+                <div class="nav-item active" onclick="showSection('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" onclick="showSection('orders')">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Order Management</span>
+                </div>
+                <div class="nav-item" onclick="showSection('menu')">
+                    <i class="fas fa-utensils"></i>
+                    <span>Menu Management</span>
+                </div>
+                <div class="nav-item" onclick="showSection('preparation')">
+                    <i class="fas fa-clock"></i>
+                    <span>Order Preparation</span>
+                </div>
+                <div class="nav-item" onclick="showSection('promotions')">
+                    <i class="fas fa-percentage"></i>
+                    <span>Promotions & Offers</span>
+                </div>
+                <div class="nav-item" onclick="showSection('earnings')">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Earnings & Reports</span>
+                </div>
+                <div class="nav-item" onclick="showSection('support')">
+                    <i class="fas fa-headset"></i>
+                    <span>Support</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="header">
+                <h1 class="page-title">Dashboard Overview</h1>
+                <div class="user-profile">
+                    <div class="user-avatar">RK</div>
+                    <div>
+                        <div style="font-weight: 600;">Royal Kitchen</div>
+                        <div style="font-size: 0.85rem; color: var(--gray);">Premium Partner</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="section-page active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="title"><i class="fas fa-shopping-bag"></i> Today's Orders</div>
+                        <div class="value">24</div>
+                        <div class="change positive">
+                            <i class="fas fa-arrow-up"></i> 12% from yesterday
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="title"><i class="fas fa-rupee-sign"></i> Total Earnings</div>
+                        <div class="value">₹8,450</div>
+                        <div class="change positive">
+                            <i class="fas fa-arrow-up"></i> 18% from yesterday
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="title"><i class="fas fa-clock"></i> Pending Payouts</div>
+                        <div class="value">₹23,500</div>
+                        <div class="change negative">
+                            <i class="fas fa-arrow-down"></i> 2 orders pending
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="title"><i class="fas fa-star"></i> Customer Rating</div>
+                        <div class="value">4.8</div>
+                        <div class="change positive">
+                            <i class="fas fa-arrow-up"></i> 0.2 from last week
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Orders</h2>
+                        <button class="btn-outline">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#ORD-7845</td>
+                                <td>
+                                    <div>Rahul Sharma</div>
+                                    <div class="badge badge-primary">Regular Customer</div>
+                                </td>
+                                <td>2 items</td>
+                                <td>₹420</td>
+                                <td><span class="status new"><i class="fas fa-circle"></i> New Order</span></td>
+                                <td>
+                                    <button class="action-btn btn-primary">
+                                        <i class="fas fa-check"></i> Accept
+                                    </button>
+                                    <button class="action-btn btn-danger">
+                                        <i class="fas fa-times"></i> Reject
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-7844</td>
+                                <td>Priya Patel</td>
+                                <td>3 items</td>
+                                <td>₹650</td>
+                                <td><span class="status preparing"><i class="fas fa-clock"></i> Preparing</span></td>
+                                <td>
+                                    <button class="action-btn btn-success">
+                                        <i class="fas fa-check-circle"></i> Ready
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-7843</td>
+                                <td>Amit Singh</td>
+                                <td>1 item</td>
+                                <td>₹280</td>
+                                <td><span class="status ready"><i class="fas fa-check-circle"></i> Ready</span></td>
+                                <td>
+                                    <button class="action-btn btn-outline">
+                                        <i class="fas fa-truck"></i> Handover
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Order Management Section -->
+            <div id="orders-section" class="section-page">
+                <div class="section-tabs">
+                    <div class="section-tab active" onclick="showSubSection('new-orders')">New Orders</div>
+                    <div class="section-tab" onclick="showSubSection('preparing-orders')">Preparing</div>
+                    <div class="section-tab" onclick="showSubSection('ready-orders')">Ready for Pickup</div>
+                    <div class="section-tab" onclick="showSubSection('completed-orders')">Completed</div>
+                    <div class="section-tab" onclick="showSubSection('cancelled-orders')">Cancelled</div>
+                </div>
+                
+                <!-- New Orders Subsection -->
+                <div id="new-orders" class="sub-section active">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">New Orders</h2>
+                            <div>
+                                <button class="btn-outline">
+                                    <i class="fas fa-filter"></i> Filter
+                                </button>
+                                <button class="btn-outline" style="margin-left: 0.5rem;">
+                                    <i class="fas fa-download"></i> Export
+                                </button>
+                            </div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Time</th>
+                                    <th>Customer</th>
+                                    <th>Items</th>
+                                    <th>Amount</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#ORD-7846</td>
+                                    <td>2 min ago</td>
+                                    <td>Sanjay Verma</td>
+                                    <td>3 items</td>
+                                    <td>₹520</td>
+                                    <td>
+                                        <button class="action-btn btn-primary">
+                                            <i class="fas fa-check"></i> Accept
+                                        </button>
+                                        <button class="action-btn btn-danger">
+                                            <i class="fas fa-times"></i> Reject
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#ORD-7845</td>
+                                    <td>15 min ago</td>
+                                    <td>Rahul Sharma</td>
+                                    <td>2 items</td>
+                                    <td>₹420</td>
+                                    <td>
+                                        <button class="action-btn btn-primary">
+                                            <i class="fas fa-check"></i> Accept
+                                        </button>
+                                        <button class="action-btn btn-danger">
+                                            <i class="fas fa-times"></i> Reject
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Preparing Orders Subsection -->
+                <div id="preparing-orders" class="sub-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Orders in Preparation</h2>
+                            <button class="btn-outline">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Time Accepted</th>
+                                    <th>Customer</th>
+                                    <th>Items</th>
+                                    <th>Prep Time</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#ORD-7844</td>
+                                    <td>25 min ago</td>
+                                    <td>Priya Patel</td>
+                                    <td>3 items</td>
+                                    <td>15 min remaining</td>
+                                    <td>
+                                        <button class="action-btn btn-success">
+                                            <i class="fas fa-check-circle"></i> Mark Ready
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Ready Orders Subsection -->
+                <div id="ready-orders" class="sub-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Ready for Pickup</h2>
+                            <button class="btn-outline">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Ready Time</th>
+                                    <th>Customer</th>
+                                    <th>Delivery Partner</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#ORD-7843</td>
+                                    <td>5 min ago</td>
+                                    <td>Amit Singh</td>
+                                    <td>Rahul D. (ETA: 8 min)</td>
+                                    <td><span class="status ready">Ready</span></td>
+                                    <td>
+                                        <button class="action-btn btn-outline">
+                                            <i class="fas fa-truck"></i> Handover
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Completed Orders Subsection -->
+                <div id="completed-orders" class="sub-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Completed Orders</h2>
+                            <div>
+                                <select style="padding: 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--gray-light);">
+                                    <option>Today</option>
+                                    <option>Last 7 Days</option>
+                                    <option>This Month</option>
+                                </select>
+                                <button class="btn-outline" style="margin-left: 0.5rem;">
+                                    <i class="fas fa-download"></i> Export
+                                </button>
+                            </div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Completion Time</th>
+                                    <th>Customer</th>
+                                    <th>Amount</th>
+                                    <th>Rating</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#ORD-7842</td>
+                                    <td>2 hours ago</td>
+                                    <td>Neha Gupta</td>
+                                    <td>₹890</td>
+                                    <td>5.0 <i class="fas fa-star" style="color: var(--accent);"></i></td>
+                                    <td>
+                                        <button class="action-btn btn-outline">
+                                            <i class="fas fa-receipt"></i> Invoice
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Cancelled Orders Subsection -->
+                <div id="cancelled-orders" class="sub-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Cancelled Orders</h2>
+                            <div>
+                                <select style="padding: 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--gray-light);">
+                                    <option>Today</option>
+                                    <option>Last 7 Days</option>
+                                    <option>This Month</option>
+                                </select>
+                            </div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Cancellation Time</th>
+                                    <th>Customer</th>
+                                    <th>Reason</th>
+                                    <th>Refund Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#ORD-7839</td>
+                                    <td>Yesterday</td>
+                                    <td>Rajesh Kumar</td>
+                                    <td>Item unavailable</td>
+                                    <td><span class="status completed">Refunded</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Other Main Sections -->
+            <div id="menu-section" class="section-page">
+                <h1>Menu & Inventory Management</h1>
+                <p>Edit your menu and manage inventory</p>
+                <!-- Content would go here -->
+            </div>
+            
+            <div id="preparation-section" class="section-page">
+                <h1>Order Preparation</h1>
+                <p>Track order preparation status</p>
+                <!-- Content would go here -->
+            </div>
+            
+            <div id="promotions-section" class="section-page">
+                <h1>Promotions & Offers</h1>
+                <p>Create and manage special offers</p>
+                <!-- Content would go here -->
+            </div>
+            
+            <div id="earnings-section" class="section-page">
+                <h1>Earnings & Reports</h1>
+                <p>View your earnings and sales reports</p>
+                <!-- Content would go here -->
+            </div>
+            
+            <div id="support-section" class="section-page">
+                <h1>Support & Communication</h1>
+                <p>Contact support and resolve issues</p>
+                <!-- Content would go here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Show the selected main section and hide others
+        function showSection(sectionId) {
+            // Update active nav item
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Update active section
+            document.querySelectorAll('.section-page').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId + '-section').classList.add('active');
+            
+            // Update page title
+            const pageTitle = document.querySelector('.page-title');
+            pageTitle.textContent = document.querySelector('.nav-item.active span').textContent;
+            
+            // Reset to first tab when switching sections
+            if (sectionId === 'orders') {
+                showSubSection('new-orders');
+            }
+        }
+        
+        // Show the selected subsection in Order Management
+        function showSubSection(subSectionId) {
+            // Update active tab
+            document.querySelectorAll('.section-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Update active subsection
+            document.querySelectorAll('.sub-section').forEach(sub => {
+                sub.classList.remove('active');
+            });
+            document.getElementById(subSectionId).classList.add('active');
+        }
+        
+        // Simulate order actions
+        document.addEventListener('click', function(e) {
+            // Accept order
+            if (e.target.closest('.btn-primary') && e.target.closest('.btn-primary').textContent.includes('Accept')) {
+                const row = e.target.closest('tr');
+                const orderId = row.querySelector('td:first-child').textContent;
+                
+                row.querySelector('.status').className = 'status preparing';
+                row.querySelector('.status').innerHTML = '<i class="fas fa-clock"></i> Preparing';
+                
+                const buttons = row.querySelectorAll('td:last-child .action-btn');
+                buttons[0].className = 'action-btn btn-success';
+                buttons[0].innerHTML = '<i class="fas fa-check-circle"></i> Ready';
+                buttons[1].remove();
+                
+                alert(`Order ${orderId} accepted and moved to preparation!`);
+            }
+            
+            // Reject order
+            if (e.target.closest('.btn-danger')) {
+                const row = e.target.closest('tr');
+                const orderId = row.querySelector('td:first-child').textContent;
+                const reason = prompt(`Please enter reason for rejecting order ${orderId}:`);
+                
+                if (reason) {
+                    row.remove();
+                    alert(`Order ${orderId} rejected. Reason: ${reason}`);
+                }
+            }
+            
+            // Mark as ready
+            if (e.target.closest('.btn-success') && e.target.closest('.btn-success').textContent.includes('Ready')) {
+                const row = e.target.closest('tr');
+                const orderId = row.querySelector('td:first-child').textContent;
+                
+                row.querySelector('.status').className = 'status ready';
+                row.querySelector('.status').innerHTML = '<i class="fas fa-check-circle"></i> Ready';
+                
+                const button = row.querySelector('td:last-child .action-btn');
+                button.className = 'action-btn btn-outline';
+                button.innerHTML = '<i class="fas fa-truck"></i> Handover';
+                
+                alert(`Order ${orderId} marked as ready for pickup!`);
+            }
+        });
+    </script>
+</body>
+</html>

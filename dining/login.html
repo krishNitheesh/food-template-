@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TummyTrek | Vendor Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF6B00;
+            --primary-light: #FF8E3A;
+            --secondary: #FF1F57;
+            --dark: #2E2E2E;
+            --gray: #6C757D;
+            --light: #F8F9FA;
+            --lighter: #F1F3F5;
+            --success: #28A745;
+            --border: #E9ECEF;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, rgba(255,107,0,0.9), rgba(255,31,87,0.9)), 
+                        url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 3rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.3);
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-icon i {
+            font-size: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+        
+        .features {
+            margin-top: 2rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .feature-text {
+            flex: 1;
+        }
+        
+        .login-section {
+            background: white;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .login-header {
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+        
+        .login-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .login-subtitle {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray);
+            position: relative;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+        
+        .tab.active {
+            color: var(--primary);
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--dark);
+        }
+        
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: var(--lighter);
+        }
+        
+        .input-group input:focus, .input-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+            outline: none;
+            background: white;
+        }
+        
+        .input-group .input-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3);
+        }
+        
+        .btn-google {
+            background: white;
+            border: 1px solid var(--border);
+            color: var(--dark);
+        }
+        
+        .btn-google:hover {
+            background: var(--lighter);
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+            margin: 0 1rem;
+        }
+        
+        .kyc-section {
+            margin-top: 2rem;
+            background: var(--lighter);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .kyc-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            gap: 0.75rem;
+        }
+        
+        .kyc-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .kyc-title {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .file-upload {
+            margin-bottom: 1.25rem;
+        }
+        
+        .file-upload label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .file-upload input {
+            display: none;
+        }
+        
+        .file-upload-btn {
+            display: flex;
+            align-items: center;
+            padding: 0.85rem 1rem;
+            background: white;
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            gap: 0.75rem;
+        }
+        
+        .file-upload-btn:hover {
+            border-color: var(--primary);
+            background: rgba(255, 107, 0, 0.05);
+        }
+        
+        .file-upload-icon {
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+        
+        .file-upload-text {
+            font-size: 0.9rem;
+        }
+        
+        .file-upload-text span {
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .file-name {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 0.5rem;
+            display: none;
+        }
+        
+        .footer-text {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        
+        .footer-text a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .container {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+            
+            .hero-section {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                margin: 1rem;
+                border-radius: 12px;
+            }
+            
+            .login-section {
+                padding: 2rem 1.5rem;
+            }
+            
+            .tabs {
+                justify-content: center;
+            }
+            
+            .tab {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="logo-text">TummyTrek</div>
+                </div>
+                
+                <h1 class="hero-title">Grow Your Restaurant Business</h1>
+                <p class="hero-subtitle">Join thousands of restaurants increasing their revenue with our platform</p>
+                
+                <div class="features">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="feature-text">
+                            <h3>Increase Visibility</h3>
+                            <p>Reach thousands of hungry customers</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="feature-text">
+                            <h3>Powerful Tools</h3>
+                            <p>Manage orders, menu, and analytics</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <div class="feature-text">
+                            <h3>24/7 Support</h3>
+                            <p>Dedicated support team for vendors</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="login-section">
+            <div class="login-header">
+                <h2 class="login-title">Vendor Portal</h2>
+                <p class="login-subtitle">Manage your restaurant business with ease</p>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('login')">Sign In</div>
+                <div class="tab" onclick="switchTab('signup')">Register</div>
+            </div>
+            
+            <div id="login-tab" class="tab-content active">
+                <div class="input-group">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" placeholder="your@email.com">
+                    <i class="fas fa-envelope input-icon"></i>
+                </div>
+                
+                <div class="input-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="••••••••">
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
+                
+                <div style="text-align: right; margin-bottom: 1.5rem;">
+                    <a href="#" style="color: var(--primary); text-decoration: none; font-size: 0.9rem;">Forgot password?</a>
+                </div>
+                
+                <button class="btn btn-primary" onclick="login()">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+                
+                <div class="divider">or continue with</div>
+                
+                <button class="btn btn-google" onclick="googleLogin()">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" width="18">
+                    Google
+                </button>
+            </div>
+            
+            <div id="signup-tab" class="tab-content">
+                <div class="input-group">
+                    <label for="signup-name">Restaurant Name</label>
+                    <input type="text" id="signup-name" placeholder="e.g. Taste of India">
+                </div>
+                
+                <div class="input-group">
+                    <label for="signup-email">Business Email</label>
+                    <input type="email" id="signup-email" placeholder="your@email.com">
+                </div>
+                
+                <div class="input-group">
+                    <label for="signup-phone">Phone Number</label>
+                    <input type="tel" id="signup-phone" placeholder="+91 9876543210">
+                </div>
+                
+                <div class="input-group">
+                    <label for="signup-password">Create Password</label>
+                    <input type="password" id="signup-password" placeholder="At least 8 characters">
+                </div>
+                
+                <button class="btn btn-primary" onclick="signup()">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </div>
+            
+            <div class="kyc-section">
+                <div class="kyc-header">
+                    <div class="kyc-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="kyc-title">KYC Verification</h3>
+                </div>
+                
+                <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 1.25rem;">
+                    Complete your verification to start receiving orders
+                </p>
+                
+                <div class="file-upload">
+                    <label>FSSAI License Certificate</label>
+                    <label class="file-upload-btn" for="fssai-upload">
+                        <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                        <div class="file-upload-text">
+                            <span>Click to upload</span> or drag and drop
+                            <div style="font-size: 0.8rem; color: var(--gray);">PDF, JPG, or PNG (max. 5MB)</div>
+                        </div>
+                    </label>
+                    <input type="file" id="fssai-upload" onchange="showFileName(this, 'fssai-name')">
+                    <div id="fssai-name" class="file-name"></div>
+                </div>
+                
+                <div class="file-upload">
+                    <label>Bank Account Details</label>
+                    <label class="file-upload-btn" for="bank-upload">
+                        <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                        <div class="file-upload-text">
+                            <span>Click to upload</span> or drag and drop
+                            <div style="font-size: 0.8rem; color: var(--gray);">PDF, JPG, or PNG (max. 5MB)</div>
+                        </div>
+                    </label>
+                    <input type="file" id="bank-upload" onchange="showFileName(this, 'bank-name')">
+                    <div id="bank-name" class="file-name"></div>
+                </div>
+                
+                <div class="file-upload">
+                    <label>Restaurant Registration</label>
+                    <label class="file-upload-btn" for="restaurant-upload">
+                        <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                        <div class="file-upload-text">
+                            <span>Click to upload</span> or drag and drop
+                            <div style="font-size: 0.8rem; color: var(--gray);">PDF, JPG, or PNG (max. 5MB)</div>
+                        </div>
+                    </label>
+                    <input type="file" id="restaurant-upload" onchange="showFileName(this, 'restaurant-name')">
+                    <div id="restaurant-name" class="file-name"></div>
+                </div>
+            </div>
+            
+            <div class="footer-text">
+                By continuing, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+        
+        function showFileName(input, targetId) {
+            const fileName = input.files[0]?.name || 'No file selected';
+            const target = document.getElementById(targetId);
+            target.textContent = fileName;
+            target.style.display = 'block';
+        }
+        
+        function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Simulate login
+            alert(`Login attempt with:\nEmail: ${email}`);
+        }
+        
+        function signup() {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const phone = document.getElementById('signup-phone').value;
+            const password = document.getElementById('signup-password').value;
+            
+            if (!name || !email || !phone || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Simulate signup
+            alert(`Account creation for:\nRestaurant: ${name}\nEmail: ${email}\nPhone: ${phone}`);
+        }
+        
+        function googleLogin() {
+            // Simulate Google login
+            alert('Redirecting to Google authentication...');
+        }
+    </script>
+</body>
+</html>

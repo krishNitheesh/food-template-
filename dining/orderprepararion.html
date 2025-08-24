@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TummyTrek | Order Preparation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Vibrant Food-Themed Color Palette */
+            --primary: #FF6B35;  /* Vibrant Orange */
+            --primary-light: #FF9E56;  
+            --primary-dark: #E04E10;
+            --secondary: #4ECDC4;  /* Fresh Teal */
+            --accent: #FFD166;  /* Golden Yellow */
+            --danger: #EF476F;  /* Vibrant Pink */
+            --success: #06D6A0;  /* Mint Green */
+            
+            /* Neutrals */
+            --dark: #2E2E2E;
+            --gray-dark: #5E5E5E;
+            --gray: #9E9E9E;
+            --gray-light: #E0E0E0;
+            --light: #F8F9FA;
+            --white: #FFFFFF;
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.15);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.2);
+            
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            
+            /* Transitions */
+            --transition-fast: 0.2s ease;
+            --transition-med: 0.3s ease;
+            --transition-slow: 0.4s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .brand {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+        
+        .brand-text {
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        
+        .nav-menu {
+            padding: 1.5rem 0;
+        }
+        
+        .nav-item {
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            font-weight: 500;
+            margin: 0.25rem 0;
+        }
+        
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .nav-item.active {
+            background: rgba(255,255,255,0.15);
+            border-left: 4px solid var(--accent);
+        }
+        
+        .nav-item i {
+            width: 24px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            padding: 2rem;
+            background-color: var(--light);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-med);
+            border-top: 4px solid var(--primary);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .stat-card .title {
+            font-size: 0.95rem;
+            color: var(--gray-dark);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .stat-card .change {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .change.positive {
+            color: var(--success);
+        }
+        
+        .change.negative {
+            color: var(--danger);
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+        
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--gray-dark);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        tr:hover {
+            background: rgba(70, 107, 238, 0.03);
+        }
+        
+        /* Status Badges */
+        .status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .status i {
+            font-size: 0.7rem;
+        }
+        
+        .status.new {
+            background: rgba(239, 71, 111, 0.1);
+            color: var(--danger);
+        }
+        
+        .status.preparing {
+            background: rgba(255, 209, 102, 0.15);
+            color: #D4A017;
+        }
+        
+        .status.ready {
+            background: rgba(6, 214, 160, 0.1);
+            color: var(--success);
+        }
+        
+        .status.completed {
+            background: rgba(78, 205, 196, 0.1);
+            color: var(--secondary);
+        }
+        
+        .status.cancelled {
+            background: rgba(239, 71, 111, 0.1);
+            color: var(--danger);
+        }
+        
+        .status.urgent {
+            background: rgba(239, 71, 111, 0.2);
+            color: var(--danger);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        /* Badges */
+        .badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background: var(--light);
+            color: var(--gray-dark);
+        }
+        
+        .badge-primary {
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--primary);
+        }
+        
+        /* Buttons */
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: var(--white);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gray-light);
+            color: var(--gray-dark);
+        }
+        
+        .btn-outline:hover {
+            background: var(--light);
+        }
+        
+        /* Tabs */
+        .section-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--gray-light);
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--gray-dark);
+            position: relative;
+            transition: var(--transition-fast);
+        }
+        
+        .section-tab:hover {
+            color: var(--primary);
+        }
+        
+        .section-tab.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .section-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        /* Section Pages */
+        .section-page {
+            display: none;
+        }
+        
+        .section-page.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        .sub-section {
+            display: none;
+        }
+        
+        .sub-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Order Preparation Specific Styles */
+        .prep-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        @media (max-width: 1200px) {
+            .prep-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .kitchen-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        
+        .order-card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid var(--primary);
+            transition: var(--transition-med);
+        }
+        
+        .order-card.urgent {
+            border-left: 4px solid var(--danger);
+            box-shadow: 0 0 0 2px rgba(239, 71, 111, 0.2);
+        }
+        
+        .order-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .order-id {
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        
+        .order-time {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        
+        .order-items {
+            margin-bottom: 1rem;
+        }
+        
+        .order-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-name {
+            font-weight: 500;
+        }
+        
+        .item-notes {
+            font-size: 0.85rem;
+            color: var(--gray-dark);
+            margin-top: 0.25rem;
+            font-style: italic;
+        }
+        
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-light);
+        }
+        
+        .prep-timer {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .timer-warning {
+            color: var(--danger);
+        }
+        
+        .staff-assignment {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .staff-select {
+            padding: 0.35rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--gray-light);
+            font-size: 0.85rem;
+        }
+        
+        /* Preparation Station View */
+        .station-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .station-card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .station-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .station-name {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .station-status {
+            font-size: 0.85rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            background: var(--light);
+        }
+        
+        .station-orders {
+            min-height: 100px;
+        }
+        
+        /* Preparation Queue */
+        .prep-queue {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .queue-item {
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .queue-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .queue-id {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .queue-time {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        
+        /* Ingredient Tracking */
+        .ingredient-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .ingredient-item {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .ingredient-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .ingredient-name {
+            font-weight: 600;
+        }
+        
+        .ingredient-stock {
+            font-size: 0.85rem;
+            color: var(--gray-dark);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: var(--gray-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+        
+        .progress-normal {
+            background: var(--success);
+        }
+        
+        .progress-warning {
+            background: var(--accent);
+        }
+        
+        .progress-danger {
+            background: var(--danger);
+        }
+        
+        /* Preparation Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--gray-light);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .dashboard-container {
+                grid-template-columns: 240px 1fr;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .section-tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .prep-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .kitchen-view {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <div class="brand-text">TummyTrek</div>
+            </div>
+            
+            <div class="nav-menu">
+                <div class="nav-item" onclick="showSection('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" onclick="showSection('orders')">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Order Management</span>
+                </div>
+                <div class="nav-item" onclick="showSection('menu')">
+                    <i class="fas fa-utensils"></i>
+                    <span>Menu Management</span>
+                </div>
+                <div class="nav-item active" onclick="showSection('preparation')">
+                    <i class="fas fa-clock"></i>
+                    <span>Order Preparation</span>
+                </div>
+                <div class="nav-item" onclick="showSection('promotions')">
+                    <i class="fas fa-percentage"></i>
+                    <span>Promotions & Offers</span>
+                </div>
+                <div class="nav-item" onclick="showSection('earnings')">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Earnings & Reports</span>
+                </div>
+                <div class="nav-item" onclick="showSection('support')">
+                    <i class="fas fa-headset"></i>
+                    <span>Support</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="header">
+                <h1 class="page-title">Order Preparation</h1>
+                <div class="user-profile">
+                    <div class="user-avatar">RK</div>
+                    <div>
+                        <div style="font-weight: 600;">Royal Kitchen</div>
+                        <div style="font-size: 0.85rem; color: var(--gray);">Premium Partner</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Order Preparation Section -->
+            <div id="preparation-section" class="section-page active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="title"><i class="fas fa-list"></i> Orders in Preparation</div>
+                        <div class="value">8</div>
+                        <div class="change negative">
+                            <i class="fas fa-arrow-up"></i> 2 orders waiting
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="title"><i class="fas fa-clock"></i> Avg. Preparation Time</div>
+                        <div class="value">18 min</div>
+                        <div class="change positive">
+                            <i class="fas fa-arrow-down"></i> 2 min faster than yesterday
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="title"><i class="fas fa-user-check"></i> Staff On Duty</div>
+                        <div class="value">4/5</div>
+                        <div class="change">
+                            <i class="fas fa-info-circle"></i> 1 staff on break
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="title"><i class="fas fa-exclamation-triangle"></i> Urgent Orders</div>
+                        <div class="value">2</div>
+                        <div class="change negative">
+                            <i class="fas fa-clock"></i> Need immediate attention
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="prep-grid">
+                    <!-- Kitchen Display View -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Kitchen Display</h2>
+                            <div>
+                                <button class="btn-outline" onclick="filterOrders('all')">
+                                    All Orders
+                                </button>
+                                <button class="btn-outline" onclick="filterOrders('urgent')" style="margin-left: 0.5rem;">
+                                    <i class="fas fa-exclamation-circle"></i> Urgent
+                                </button>
+                            </div>
+                        </div>
+                        <div class="kitchen-view" id="kitchen-orders">
+                            <!-- Order cards will be dynamically inserted here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Preparation Stations -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Preparation Stations</h2>
+                            <button class="btn-outline">
+                                <i class="fas fa-cog"></i> Manage
+                            </button>
+                        </div>
+                        <div class="station-view">
+                            <div class="station-card">
+                                <div class="station-header">
+                                    <div class="station-name">Grill Station</div>
+                                    <div class="station-status">Active</div>
+                                </div>
+                                <div class="station-orders">
+                                    <div class="order-item">
+                                        <div class="item-name">Chicken Tikka (2x)</div>
+                                        <div class="item-notes">Well done</div>
+                                    </div>
+                                    <div class="order-item">
+                                        <div class="item-name">Paneer Tikka</div>
+                                        <div class="item-notes">Extra spicy</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="station-card">
+                                <div class="station-header">
+                                    <div class="station-name">Fry Station</div>
+                                    <div class="station-status">Active</div>
+                                </div>
+                                <div class="station-orders">
+                                    <div class="order-item">
+                                        <div class="item-name">French Fries (3x)</div>
+                                        <div class="item-notes">Less salt</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="station-card">
+                                <div class="station-header">
+                                    <div class="station-name">Salad Station</div>
+                                    <div class="station-status">Available</div>
+                                </div>
+                                <div class="station-orders">
+                                    <div class="item-notes">No pending orders</div>
+                                </div>
+                            </div>
+                            
+                            <div class="station-card">
+                                <div class="station-header">
+                                    <div class="station-name">Dessert Station</div>
+                                    <div class="station-status">Available</div>
+                                </div>
+                                <div class="station-orders">
+                                    <div class="item-notes">No pending orders</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Preparation Queue -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Preparation Queue</h2>
+                        <button class="btn-outline" onclick="showPreparationModal()">
+                            <i class="fas fa-plus"></i> Add Manual Order
+                        </button>
+                    </div>
+                    <div class="prep-queue" id="prep-queue">
+                        <!-- Queue items will be dynamically inserted here -->
+                    </div>
+                </div>
+                
+                <!-- Ingredient Tracking -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Ingredient Inventory</h2>
+                        <button class="btn-outline">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                    <div class="ingredient-list">
+                        <div class="ingredient-item">
+                            <div class="ingredient-header">
+                                <div class="ingredient-name">Chicken Breast</div>
+                                <div class="ingredient-stock">12/20 kg</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill progress-normal" style="width: 60%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="ingredient-item">
+                            <div class="ingredient-header">
+                                <div class="ingredient-name">Basmati Rice</div>
+                                <div class="ingredient-stock">8/25 kg</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill progress-warning" style="width: 32%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="ingredient-item">
+                            <div class="ingredient-header">
+                                <div class="ingredient-name">Paneer</div>
+                                <div class="ingredient-stock">3/15 kg</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill progress-danger" style="width: 20%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="ingredient-item">
+                            <div class="ingredient-header">
+                                <div class="ingredient-name">Tomatoes</div>
+                                <div class="ingredient-stock">15/30 kg</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill progress-normal" style="width: 50%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Other Main Sections (hidden by default) -->
+            <div id="dashboard-section" class="section-page">
+                <!-- Dashboard content would be here -->
+            </div>
+            
+            <div id="orders-section" class="section-page">
+                <!-- Order management content would be here -->
+            </div>
+            
+            <div id="menu-section" class="section-page">
+                <!-- Menu management content would be here -->
+            </div>
+            
+            <div id="promotions-section" class="section-page">
+                <!-- Promotions content would be here -->
+            </div>
+            
+            <div id="earnings-section" class="section-page">
+                <!-- Earnings content would be here -->
+            </div>
+            
+            <div id="support-section" class="section-page">
+                <!-- Support content would be here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Preparation Modal -->
+    <div class="modal-overlay" id="prep-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Add Manual Preparation Order</h2>
+                <button class="modal-close" onclick="closePreparationModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="prep-form">
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Order ID</label>
+                        <input type="text" style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius-sm);" placeholder="e.g., #ORD-7850">
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Customer Name</label>
+                        <input type="text" style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius-sm);" placeholder="Customer name">
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Items</label>
+                        <textarea style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius-sm); min-height: 100px;" placeholder="List items with modifications..."></textarea>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Priority</label>
+                        <select style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius-sm);">
+                            <option>Normal</option>
+                            <option>High Priority</option>
+                            <option>Urgent</option>
+                        </select>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Assigned Station</label>
+                        <select style="width: 100%; padding: 0.75rem; border: 1px solid var(--gray-light); border-radius: var(--radius-sm);">
+                            <option>Grill Station</option>
+                            <option>Fry Station</option>
+                            <option>Salad Station</option>
+                            <option>Dessert Station</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="action-btn btn-outline" onclick="closePreparationModal()">Cancel</button>
+                <button class="action-btn btn-primary" onclick="addManualOrder()">Add to Preparation</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for orders in preparation
+        const preparationOrders = [
+            {
+                id: "#ORD-7847",
+                time: "15 min ago",
+                customer: "Vikram Singh",
+                items: [
+                    { name: "Butter Chicken", notes: "Extra gravy" },
+                    { name: "Garlic Naan (2x)", notes: "" },
+                    { name: "Coke", notes: "No ice" }
+                ],
+                status: "preparing",
+                prepTime: 12,
+                totalTime: 25,
+                assignedStaff: "chef-raj",
+                urgent: true
+            },
+            {
+                id: "#ORD-7846",
+                time: "18 min ago",
+                customer: "Sanjay Verma",
+                items: [
+                    { name: "Chicken Biryani", notes: "Extra raita" },
+                    { name: "Salad", notes: "No onions" }
+                ],
+                status: "preparing",
+                prepTime: 18,
+                totalTime: 30,
+                assignedStaff: "chef-anil",
+                urgent: false
+            },
+            {
+                id: "#ORD-7845",
+                time: "22 min ago",
+                customer: "Rahul Sharma",
+                items: [
+                    { name: "Paneer Butter Masala", notes: "Mild spice" },
+                    { name: "Plain Naan (2x)", notes: "" }
+                ],
+                status: "preparing",
+                prepTime: 8,
+                totalTime: 20,
+                assignedStaff: "chef-suman",
+                urgent: false
+            },
+            {
+                id: "#ORD-7844",
+                time: "25 min ago",
+                customer: "Priya Patel",
+                items: [
+                    { name: "Veg Fried Rice", notes: "" },
+                    { name: "Manchurian", notes: "Gravy on side" }
+                ],
+                status: "preparing",
+                prepTime: 5,
+                totalTime: 15,
+                assignedStaff: "chef-anil",
+                urgent: false
+            }
+        ];
+
+        // Sample data for preparation queue
+        const preparationQueue = [
+            { id: "#ORD-7848", time: "2 min ago", customer: "Neha Gupta" },
+            { id: "#ORD-7849", time: "Just now", customer: "Amit Kumar" },
+            { id: "#ORD-7850", time: "Just now", customer: "Sneha Desai" }
+        ];
+
+        // Staff members data
+        const staffMembers = [
+            { id: "chef-raj", name: "Chef Raj" },
+            { id: "chef-anil", name: "Chef Anil" },
+            { id: "chef-suman", name: "Chef Suman" },
+            { id: "chef-mohan", name: "Chef Mohan" }
+        ];
+
+        // Function to show different sections
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section-page').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show the selected section
+            document.getElementById(sectionId + '-section').classList.add('active');
+            
+            // Set the nav item as active
+            const navItems = document.querySelectorAll('.nav-item');
+            for (let item of navItems) {
+                if (item.textContent.includes(sectionId.charAt(0).toUpperCase() + sectionId.slice(1))) {
+                    item.classList.add('active');
+                    break;
+                }
+            }
+        }
+
+        // Function to render orders in the kitchen view
+        function renderKitchenOrders(filter = 'all') {
+            const kitchenOrdersContainer = document.getElementById('kitchen-orders');
+            kitchenOrdersContainer.innerHTML = '';
+            
+            let filteredOrders = preparationOrders;
+            
+            if (filter === 'urgent') {
+                filteredOrders = preparationOrders.filter(order => order.urgent);
+            }
+            
+            filteredOrders.forEach(order => {
+                const orderCard = document.createElement('div');
+                orderCard.className = `order-card ${order.urgent ? 'urgent' : ''}`;
+                
+                // Calculate remaining time
+                const remainingTime = order.totalTime - order.prepTime;
+                const timerClass = remainingTime < 5 ? 'timer-warning' : '';
+                
+                // Get assigned staff name
+                const assignedStaff = staffMembers.find(staff => staff.id === order.assignedStaff);
+                
+                orderCard.innerHTML = `
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">${order.id}</div>
+                            <div class="order-time">${order.time} • ${order.customer}</div>
+                        </div>
+                        <span class="status ${order.status}">
+                            <i class="fas fa-${order.status === 'preparing' ? 'fire' : 'clock'}"></i>
+                            ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                        </span>
+                    </div>
+                    <div class="order-items">
+                        ${order.items.map(item => `
+                            <div class="order-item">
+                                <div class="item-name">${item.name}</div>
+                                ${item.notes ? `<div class="item-notes">${item.notes}</div>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="order-footer">
+                        <div class="prep-timer ${timerClass}">
+                            <i class="fas fa-clock"></i>
+                            ${remainingTime} min remaining
+                        </div>
+                        <div class="staff-assignment">
+                            <select class="staff-select" onchange="changeStaff('${order.id}', this.value)">
+                                ${staffMembers.map(staff => `
+                                    <option value="${staff.id}" ${order.assignedStaff === staff.id ? 'selected' : ''}>
+                                        ${staff.name}
+                                    </option>
+                                `).join('')}
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                        <button class="action-btn btn-success" onclick="markAsReady('${order.id}')">
+                            <i class="fas fa-check"></i> Mark as Ready
+                        </button>
+                        <button class="action-btn btn-danger" onclick="cancelOrder('${order.id}')">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                `;
+                
+                kitchenOrdersContainer.appendChild(orderCard);
+            });
+        }
+
+        // Function to render preparation queue
+        function renderPreparationQueue() {
+            const prepQueueContainer = document.getElementById('prep-queue');
+            prepQueueContainer.innerHTML = '';
+            
+            preparationQueue.forEach(order => {
+                const queueItem = document.createElement('div');
+                queueItem.className = 'queue-item';
+                
+                queueItem.innerHTML = `
+                    <div class="queue-info">
+                        <div class="queue-id">${order.id}</div>
+                        <div class="queue-time">${order.time} • ${order.customer}</div>
+                    </div>
+                    <button class="action-btn btn-primary" onclick="startPreparation('${order.id}')">
+                        <i class="fas fa-play"></i> Start Preparation
+                    </button>
+                `;
+                
+                prepQueueContainer.appendChild(queueItem);
+            });
+        }
+
+        // Function to filter orders
+        function filterOrders(filter) {
+            renderKitchenOrders(filter);
+        }
+
+        // Function to change staff assignment
+        function changeStaff(orderId, staffId) {
+            const order = preparationOrders.find(order => order.id === orderId);
+            if (order) {
+                order.assignedStaff = staffId;
+                renderKitchenOrders();
+            }
+        }
+
+        // Function to mark order as ready
+        function markAsReady(orderId) {
+            const orderIndex = preparationOrders.findIndex(order => order.id === orderId);
+            if (orderIndex !== -1) {
+                preparationOrders.splice(orderIndex, 1);
+                renderKitchenOrders();
+                
+                // Show success notification
+                alert(`Order ${orderId} has been marked as ready!`);
+            }
+        }
+
+        // Function to cancel an order
+        function cancelOrder(orderId) {
+            if (confirm(`Are you sure you want to cancel order ${orderId}?`)) {
+                const orderIndex = preparationOrders.findIndex(order => order.id === orderId);
+                if (orderIndex !== -1) {
+                    preparationOrders.splice(orderIndex, 1);
+                    renderKitchenOrders();
+                    
+                    // Show cancellation notification
+                    alert(`Order ${orderId} has been cancelled.`);
+                }
+            }
+        }
+
+        // Function to start preparation of a queued order
+        function startPreparation(orderId) {
+            const queueIndex = preparationQueue.findIndex(order => order.id === orderId);
+            if (queueIndex !== -1) {
+                const order = preparationQueue[queueIndex];
+                
+                // Remove from queue
+                preparationQueue.splice(queueIndex, 1);
+                
+                // Add to preparation orders with default values
+                preparationOrders.push({
+                    id: order.id,
+                    time: "Just now",
+                    customer: order.customer,
+                    items: [{ name: "Sample Item", notes: "Added from queue" }],
+                    status: "preparing",
+                    prepTime: 0,
+                    totalTime: 20,
+                    assignedStaff: "chef-raj",
+                    urgent: false
+                });
+                
+                // Update both views
+                renderPreparationQueue();
+                renderKitchenOrders();
+                
+                // Show notification
+                alert(`Started preparation for order ${orderId}`);
+            }
+        }
+
+        // Function to show preparation modal
+        function showPreparationModal() {
+            document.getElementById('prep-modal').style.display = 'flex';
+        }
+
+        // Function to close preparation modal
+        function closePreparationModal() {
+            document.getElementById('prep-modal').style.display = 'none';
+        }
+
+        // Function to add a manual order
+        function addManualOrder() {
+            const form = document.getElementById('prep-form');
+            const orderId = form.querySelector('input[type="text"]').value || "#ORD-" + Math.floor(Math.random() * 10000);
+            const customerName = form.querySelectorAll('input[type="text"]')[1].value || "Walk-in Customer";
+            const itemsText = form.querySelector('textarea').value || "Manual order";
+            const priority = form.querySelector('select').value;
+            
+            // Add to preparation queue
+            preparationQueue.unshift({
+                id: orderId,
+                time: "Just now",
+                customer: customerName
+            });
+            
+            // Update queue view
+            renderPreparationQueue();
+            
+            // Close modal and reset form
+            closePreparationModal();
+            form.reset();
+            
+            // Show success notification
+            alert(`Manual order ${orderId} has been added to the queue!`);
+        }
+
+        // Initialize the dashboard when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            renderKitchenOrders();
+            renderPreparationQueue();
+            
+            // Set up section tabs if any
+            const sectionTabs = document.querySelectorAll('.section-tab');
+            if (sectionTabs.length > 0) {
+                sectionTabs.forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        // Remove active class from all tabs
+                        sectionTabs.forEach(t => t.classList.remove('active'));
+                        
+                        // Add active class to clicked tab
+                        this.classList.add('active');
+                        
+                        // Show the corresponding section
+                        const target = this.getAttribute('data-target');
+                        document.querySelectorAll('.sub-section').forEach(section => {
+                            section.classList.remove('active');
+                        });
+                        document.getElementById(target).classList.add('active');
+                    });
+                });
+            }
+        });
+    </script>

@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TummyTrek | Earnings & Reports</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            /* Vibrant Food-Themed Color Palette */
+            --primary: #FF6B35;  /* Vibrant Orange */
+            --primary-light: #FF9E56;  
+            --primary-dark: #E04E10;
+            --secondary: #4ECDC4;  /* Fresh Teal */
+            --accent: #FFD166;  /* Golden Yellow */
+            --danger: #EF476F;  /* Vibrant Pink */
+            --success: #06D6A0;  /* Mint Green */
+            
+            /* Neutrals */
+            --dark: #2E2E2E;
+            --gray-dark: #5E5E5E;
+            --gray: #9E9E9E;
+            --gray-light: #E0E0E0;
+            --light: #F8F9FA;
+            --white: #FFFFFF;
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.15);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.2);
+            
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            
+            /* Transitions */
+            --transition-fast: 0.2s ease;
+            --transition-med: 0.3s ease;
+            --transition-slow: 0.4s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .brand {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+        
+        .brand-text {
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        
+        .nav-menu {
+            padding: 1.5rem 0;
+        }
+        
+        .nav-item {
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            font-weight: 500;
+            margin: 0.25rem 0;
+        }
+        
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .nav-item.active {
+            background: rgba(255,255,255,0.15);
+            border-left: 4px solid var(--accent);
+        }
+        
+        .nav-item i {
+            width: 24px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            padding: 2rem;
+            background-color: var(--light);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-med);
+            border-top: 4px solid var(--primary);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .stat-card .title {
+            font-size: 0.95rem;
+            color: var(--gray-dark);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .stat-card .change {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .change.positive {
+            color: var(--success);
+        }
+        
+        .change.negative {
+            color: var(--danger);
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+        
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--gray-dark);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        tr:hover {
+            background: rgba(70, 107, 238, 0.03);
+        }
+        
+        /* Status Badges */
+        .status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .status i {
+            font-size: 0.7rem;
+        }
+        
+        .status.active {
+            background: rgba(6, 214, 160, 0.1);
+            color: var(--success);
+        }
+        
+        .status.scheduled {
+            background: rgba(255, 209, 102, 0.15);
+            color: #D4A017;
+        }
+        
+        .status.expired {
+            background: rgba(158, 158, 158, 0.1);
+            color: var(--gray);
+        }
+        
+        .status.paused {
+            background: rgba(239, 71, 111, 0.1);
+            color: var(--danger);
+        }
+        
+        .status.pending {
+            background: rgba(255, 209, 102, 0.15);
+            color: #D4A017;
+        }
+        
+        .status.completed {
+            background: rgba(6, 214, 160, 0.1);
+            color: var(--success);
+        }
+        
+        /* Badges */
+        .badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background: var(--light);
+            color: var(--gray-dark);
+        }
+        
+        .badge-primary {
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--primary);
+        }
+        
+        /* Buttons */
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: var(--white);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gray-light);
+            color: var(--gray-dark);
+        }
+        
+        .btn-outline:hover {
+            background: var(--light);
+        }
+        
+        /* Tabs */
+        .section-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--gray-light);
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--gray-dark);
+            position: relative;
+            transition: var(--transition-fast);
+        }
+        
+        .section-tab:hover {
+            color: var(--primary);
+        }
+        
+        .section-tab.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .section-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        /* Section Pages */
+        .section-page {
+            display: none;
+        }
+        
+        .section-page.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        .sub-section {
+            display: none;
+        }
+        
+        .sub-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--gray-dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            transition: var(--transition-fast);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            background-color: var(--white);
+            cursor: pointer;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        /* Chart Containers */
+        .chart-container {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .chart-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .chart-wrapper {
+            height: 300px;
+            position: relative;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .dashboard-container {
+                grid-template-columns: 240px 1fr;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .section-tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <div class="brand-text">TummyTrek</div>
+            </div>
+            
+            <div class="nav-menu">
+                <div class="nav-item" onclick="showSection('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" onclick="showSection('orders')">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Order Management</span>
+                </div>
+                <div class="nav-item" onclick="showSection('menu')">
+                    <i class="fas fa-utensils"></i>
+                    <span>Menu Management</span>
+                </div>
+                <div class="nav-item" onclick="showSection('preparation')">
+                    <i class="fas fa-clock"></i>
+                    <span>Order Preparation</span>
+                </div>
+                <div class="nav-item" onclick="showSection('promotions')">
+                    <i class="fas fa-percentage"></i>
+                    <span>Promotions & Offers</span>
+                </div>
+                <div class="nav-item active" onclick="showSection('earnings')">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Earnings & Reports</span>
+                </div>
+                <div class="nav-item" onclick="showSection('support')">
+                    <i class="fas fa-headset"></i>
+                    <span>Support</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="header">
+                <h1 class="page-title">Earnings & Reports</h1>
+                <div class="user-profile">
+                    <div class="user-avatar">RK</div>
+                    <div>
+                        <div style="font-weight: 600;">Royal Kitchen</div>
+                        <div style="font-size: 0.85rem; color: var(--gray);">Premium Partner</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Earnings & Reports Section -->
+            <div id="earnings-section" class="section-page active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="title"><i class="fas fa-rupee-sign"></i> Today's Revenue</div>
+                        <div class="value">₹24,560</div>
+                        <div class="change positive">
+                            <i class="fas fa-arrow-up"></i> 12% increase from yesterday
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="title"><i class="fas fa-calendar-week"></i> Weekly Revenue</div>
+                        <div class="value">₹1,48,320</div>
+                        <div class="change positive">
+                            <i class="fas fa-arrow-up"></i> 8% increase from last week
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="title"><i class="fas fa-calendar"></i> Monthly Revenue</div>
+                        <div class="value">₹5,84,560</div>
+                        <div class="change positive">
+                            <i class="fas fa-arrow-up"></i> 15% increase from last month
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="title"><i class="fas fa-wallet"></i> Pending Payouts</div>
+                        <div class="value">₹42,380</div>
+                        <div class="change negative">
+                            <i class="fas fa-clock"></i> Processing in 3 days
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-tabs">
+                    <div class="section-tab active" data-target="earnings-dashboard">Earnings Dashboard</div>
+                    <div class="section-tab" data-target="payout-tracking">Payout Tracking</div>
+                    <div class="section-tab" data-target="sales-reports">Sales Reports</div>
+                </div>
+                
+                <!-- Earnings Dashboard Subsection -->
+                <div id="earnings-dashboard" class="sub-section active">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Revenue Overview</h3>
+                            <div class="chart-actions">
+                                <select class="form-select" id="revenue-period" onchange="updateRevenueChart()" style="width: auto;">
+                                    <option value="7">Last 7 days</option>
+                                    <option value="30" selected>Last 30 days</option>
+                                    <option value="90">Last 3 months</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Earnings by Category</h3>
+                            <div class="chart-actions">
+                                <select class="form-select" id="category-period" onchange="updateCategoryChart()" style="width: auto;">
+                                    <option value="7">Last 7 days</option>
+                                    <option value="30" selected>Last 30 days</option>
+                                    <option value="90">Last 3 months</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Daily Performance</h2>
+                            <button class="btn-outline">
+                                <i class="fas fa-download"></i> Export Report
+                            </button>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Orders</th>
+                                        <th>Revenue</th>
+                                        <th>Avg. Order Value</th>
+                                        <th>Promo Revenue</th>
+                                        <th>Growth</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Today</td>
+                                        <td>42</td>
+                                        <td>₹24,560</td>
+                                        <td>₹585</td>
+                                        <td>₹3,450</td>
+                                        <td class="change positive">+12%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Yesterday</td>
+                                        <td>38</td>
+                                        <td>₹21,890</td>
+                                        <td>₹576</td>
+                                        <td>₹2,980</td>
+                                        <td class="change positive">+5%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2 days ago</td>
+                                        <td>35</td>
+                                        <td>₹19,450</td>
+                                        <td>₹556</td>
+                                        <td>₹2,540</td>
+                                        <td class="change negative">-3%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3 days ago</td>
+                                        <td>40</td>
+                                        <td>₹23,120</td>
+                                        <td>₹578</td>
+                                        <td>₹3,120</td>
+                                        <td class="change positive">+8%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4 days ago</td>
+                                        <td>36</td>
+                                        <td>₹20,340</td>
+                                        <td>₹565</td>
+                                        <td>₹2,780</td>
+                                        <td class="change positive">+4%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Payout Tracking Subsection -->
+                <div id="payout-tracking" class="sub-section">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="title"><i class="fas fa-clock"></i> Pending Payouts</div>
+                            <div class="value">₹42,380</div>
+                            <div class="change">
+                                <i class="fas fa-calendar"></i> Next payout: Jun 15
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="title"><i class="fas fa-check-circle"></i> Last Payout</div>
+                            <div class="value">₹38,450</div>
+                            <div class="change">
+                                <i class="fas fa-calendar"></i> Processed: Jun 1
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="title"><i class="fas fa-calendar"></i> This Month</div>
+                            <div class="value">₹1,24,380</div>
+                            <div class="change positive">
+                                <i class="fas fa-arrow-up"></i> 12% from last month
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="title"><i class="fas fa-percentage"></i> Commission Rate</div>
+                            <div class="value">18.5%</div>
+                            <div class="change">
+                                <i class="fas fa-info-circle"></i> Platform fees included
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Payout History</h2>
+                            <button class="btn-outline">
+                                <i class="fas fa-download"></i> Export Statement
+                            </button>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Payout ID</th>
+                                        <th>Period</th>
+                                        <th>Orders</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Processed On</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#PY-7890</td>
+                                        <td>1 Jun - 15 Jun</td>
+                                        <td>142</td>
+                                        <td>₹38,450</td>
+                                        <td><span class="status completed">Completed</span></td>
+                                        <td>15 Jun 2023</td>
+                                        <td>
+                                            <button class="action-btn btn-outline">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#PY-7889</td>
+                                        <td>16 May - 31 May</td>
+                                        <td>138</td>
+                                        <td>₹36,780</td>
+                                        <td><span class="status completed">Completed</span></td>
+                                        <td>1 Jun 2023</td>
+                                        <td>
+                                            <button class="action-btn btn-outline">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#PY-7888</td>
+                                        <td>1 May - 15 May</td>
+                                        <td>125</td>
+                                        <td>₹32,450</td>
+                                        <td><span class="status completed">Completed</span></td>
+                                        <td>15 May 2023</td>
+                                        <td>
+                                            <button class="action-btn btn-outline">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#PY-7887</td>
+                                        <td>16 Apr - 30 Apr</td>
+                                        <td>118</td>
+                                        <td>₹30,120</td>
+                                        <td><span class="status completed">Completed</span></td>
+                                        <td>1 May 2023</td>
+                                        <td>
+                                            <button class="action-btn btn-outline">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Pending Payouts</h2>
+                            <button class="btn-outline">
+                                <i class="fas fa-sync"></i> Refresh
+                            </button>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Payout ID</th>
+                                        <th>Period</th>
+                                        <th>Orders</th>
+                                        <th>Amount</th>
+                                        <th>Estimated Processing</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#PY-7891</td>
+                                        <td>16 Jun - 30 Jun</td>
+                                        <td>86</td>
+                                        <td>₹42,380</td>
+                                        <td>15 Jul 2023</td>
+                                        <td><span class="status pending">Pending</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sales Reports Subsection -->
+                <div id="sales-reports" class="sub-section">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Best Selling Dishes</h3>
+                            <div class="chart-actions">
+                                <select class="form-select" id="dishes-period" onchange="updateDishesChart()" style="width: auto;">
+                                    <option value="7">Last 7 days</option>
+                                    <option value="30" selected>Last 30 days</option>
+                                    <option value="90">Last 3 months</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="dishesChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Peak Hours Analysis</h3>
+                            <div class="chart-actions">
+                                <select class="form-select" id="hours-period" onchange="updateHoursChart()" style="width: auto;">
+                                    <option value="7">Last 7 days</option>
+                                    <option value="30" selected>Last 30 days</option>
+                                    <option value="90">Last 3 months</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="hoursChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Top Performing Menu Items</h2>
+                            <button class="btn-outline">
+                                <i class="fas fa-download"></i> Export Report
+                            </button>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Dish Name</th>
+                                        <th>Category</th>
+                                        <th>Orders</th>
+                                        <th>Revenue</th>
+                                        <th>Avg. Rating</th>
+                                        <th>Popularity Trend</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Butter Chicken</td>
+                                        <td>Main Course</td>
+                                        <td>186</td>
+                                        <td>₹60,540</td>
+                                        <td>4.8</td>
+                                        <td class="change positive">+15%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Paneer Tikka</td>
+                                        <td>Starters</td>
+                                        <td>142</td>
+                                        <td>₹34,790</td>
+                                        <td>4.7</td>
+                                        <td class="change positive">+12%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Hyderabadi Biryani</td>
+                                        <td>Biryani</td>
+                                        <td>125</td>
+                                        <td>₹41,250</td>
+                                        <td>4.9</td>
+                                        <td class="change positive">+18%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Butter Naan</td>
+                                        <td>Breads</td>
+                                        <td>238</td>
+                                        <td>₹13,090</td>
+                                        <td>4.6</td>
+                                        <td class="change positive">+8%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gulab Jamun</td>
+                                        <td>Desserts</td>
+                                        <td>98</td>
+                                        <td>₹12,250</td>
+                                        <td>4.7</td>
+                                        <td class="change positive">+5%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Peak Hours Performance</h2>
+                            <button class="btn-outline">
+                                <i class="fas fa-download"></i> Export Report
+                            </button>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Time Slot</th>
+                                        <th>Orders</th>
+                                        <th>Revenue</th>
+                                        <th>Avg. Preparation Time</th>
+                                        <th>Busyness Level</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>12:00 PM - 2:00 PM</td>
+                                        <td>215</td>
+                                        <td>₹1,24,580</td>
+                                        <td>22 mins</td>
+                                        <td class="change negative">Very High</td>
+                                    </tr>
+                                    <tr>
+                                        <td>7:00 PM - 9:00 PM</td>
+                                        <td>198</td>
+                                        <td>₹1,18,420</td>
+                                        <td>25 mins</td>
+                                        <td class="change negative">High</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2:00 PM - 4:00 PM</td>
+                                        <td>86</td>
+                                        <td>₹48,360</td>
+                                        <td>18 mins</td>
+                                        <td class="change">Medium</td>
+                                    </tr>
+                                    <tr>
+                                        <td>9:00 PM - 11:00 PM</td>
+                                        <td>74</td>
+                                        <td>₹42,150</td>
+                                        <td>20 mins</td>
+                                        <td class="change">Medium</td>
+                                    </tr>
+                                    <tr>
+                                        <td>10:00 AM - 12:00 PM</td>
+                                        <td>52</td>
+                                        <td>₹28,440</td>
+                                        <td>16 mins</td>
+                                        <td class="change positive">Low</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to show different sections
+        function showSection(sectionId) {
+            // Hide all section pages
+            document.querySelectorAll('.section-page').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show the selected section
+            document.getElementById(sectionId + '-section').classList.add('active');
+            
+            // Set the selected nav item as active
+            event.currentTarget.classList.add('active');
+            
+            // Update page title
+            const pageTitle = event.currentTarget.querySelector('span').textContent;
+            document.querySelector('.page-title').textContent = pageTitle;
+        }
+        
+        // Tab functionality for earnings section
+        document.querySelectorAll('.section-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                document.querySelectorAll('.section-tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Hide all sub-sections
+                document.querySelectorAll('.sub-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show the targeted sub-section
+                const targetId = this.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+        
+        // Initialize charts when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initRevenueChart();
+            initCategoryChart();
+            initDishesChart();
+            initHoursChart();
+        });
+        
+        // Revenue Chart
+        let revenueChart;
+        function initRevenueChart() {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            revenueChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['1 Jun', '5 Jun', '10 Jun', '15 Jun', '20 Jun', '25 Jun', '30 Jun'],
+                    datasets: [{
+                        label: 'Daily Revenue',
+                        data: [18500, 21200, 19800, 24500, 23200, 25800, 26700],
+                        borderColor: '#FF6B35',
+                        backgroundColor: 'rgba(255, 107, 53, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawBorder: false
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '₹' + value.toLocaleString();
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateRevenueChart() {
+            const period = document.getElementById('revenue-period').value;
+            
+            // In a real app, this would fetch data based on the selected period
+            // For demo purposes, we'll just update with sample data
+            if (period === '7') {
+                revenueChart.data.labels = ['24 Jun', '25 Jun', '26 Jun', '27 Jun', '28 Jun', '29 Jun', '30 Jun'];
+                revenueChart.data.datasets[0].data = [23200, 24500, 22100, 25800, 24200, 26700, 24500];
+            } else if (period === '30') {
+                revenueChart.data.labels = ['1 Jun', '5 Jun', '10 Jun', '15 Jun', '20 Jun', '25 Jun', '30 Jun'];
+                revenueChart.data.datasets[0].data = [18500, 21200, 19800, 24500, 23200, 25800, 26700];
+            } else if (period === '90') {
+                revenueChart.data.labels = ['1 Apr', '1 May', '10 May', '20 May', '1 Jun', '15 Jun', '30 Jun'];
+                revenueChart.data.datasets[0].data = [16200, 17800, 19500, 21200, 24500, 25800, 26700];
+            }
+            
+            revenueChart.update();
+        }
+        
+        // Category Chart
+        let categoryChart;
+        function initCategoryChart() {
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            categoryChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Main Course', 'Starters', 'Biryani', 'Breads', 'Desserts', 'Beverages'],
+                    datasets: [{
+                        data: [35, 20, 18, 12, 9, 6],
+                        backgroundColor: [
+                            '#FF6B35',
+                            '#4ECDC4',
+                            '#FFD166',
+                            '#EF476F',
+                            '#06D6A0',
+                            '#5E5E5E'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateCategoryChart() {
+            const period = document.getElementById('category-period').value;
+            
+            // In a real app, this would fetch data based on the selected period
+            // For demo purposes, we'll just update with sample data
+            if (period === '7') {
+                categoryChart.data.datasets[0].data = [32, 22, 20, 13, 8, 5];
+            } else if (period === '30') {
+                categoryChart.data.datasets[0].data = [35, 20, 18, 12, 9, 6];
+            } else if (period === '90') {
+                categoryChart.data.datasets[0].data = [38, 18, 16, 11, 10, 7];
+            }
+            
+            categoryChart.update();
+        }
+        
+        // Dishes Chart
+        let dishesChart;
+        function initDishesChart() {
+            const ctx = document.getElementById('dishesChart').getContext('2d');
+            dishesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Butter Chicken', 'Paneer Tikka', 'Hyderabadi Biryani', 'Butter Naan', 'Gulab Jamun'],
+                    datasets: [{
+                        label: 'Number of Orders',
+                        data: [186, 142, 125, 238, 98],
+                        backgroundColor: '#FF6B35',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawBorder: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateDishesChart() {
+            const period = document.getElementById('dishes-period').value;
+            
+            // In a real app, this would fetch data based on the selected period
+            // For demo purposes, we'll just update with sample data
+            if (period === '7') {
+                dishesChart.data.datasets[0].data = [42, 32, 28, 56, 22];
+            } else if (period === '30') {
+                dishesChart.data.datasets[0].data = [186, 142, 125, 238, 98];
+            } else if (period === '90') {
+                dishesChart.data.datasets[0].data = [520, 395, 350, 680, 265];
+            }
+            
+            dishesChart.update();
+        }
+        
+        // Hours Chart
+        let hoursChart;
+        function initHoursChart() {
+            const ctx = document.getElementById('hoursChart').getContext('2d');
+            hoursChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['10-12', '12-2', '2-4', '4-7', '7-9', '9-11'],
+                    datasets: [{
+                        label: 'Number of Orders',
+                        data: [52, 215, 86, 64, 198, 74],
+                        backgroundColor: '#4ECDC4',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawBorder: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateHoursChart() {
+            const period = document.getElementById('hours-period').value;
+            
+            // In a real app, this would fetch data based on the selected period
+            // For demo purposes, we'll just update with sample data
+            if (period === '7') {
+                hoursChart.data.datasets[0].data = [12, 48, 20, 15, 45, 18];
+            } else if (period === '30') {
+                hoursChart.data.datasets[0].data = [52, 215, 86, 64, 198, 74];
+            } else if (period === '90') {
+                hoursChart.data.datasets[0].data = [145, 620, 245, 180, 570, 210];
+            }
+            
+            hoursChart.update();
+        }
+    </script>
+</body>
+</html>
